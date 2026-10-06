@@ -17,6 +17,17 @@ router = APIRouter(prefix="/api")
 
 
 def _get_pipeline(request: Request) -> VisionProcessor:
+    if not hasattr(request.app.state, "pipeline"):
+        request.app.state.pipeline = VisionProcessor(source=settings.camera_index)
+        request.app.state.pipeline.add_zone(
+            {
+                "id": "restricted-zone",
+                "name": "Restricted Area",
+                "type": "restricted",
+                "polygon": [[100, 100], [500, 100], [500, 400], [100, 400]],
+            }
+        )
+        request.app.state.zones = request.app.state.pipeline.zones.zones
     return request.app.state.pipeline
 
 

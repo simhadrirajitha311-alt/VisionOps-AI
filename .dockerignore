@@ -1,0 +1,17 @@
+node_modules/
+.next/
+__pycache__/
+.pytest_cache/
+.venv/
+venv/
+.env
+.env.*
+.git/
+.gitignore
+*.pyc
+*.pyo
+*.pyd
+*.db
+coverage/
+models/
+*.pt

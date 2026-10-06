@@ -26,8 +26,7 @@ app.add_middleware(
 )
 
 
-@app.on_event("startup")
-def startup() -> None:
+def _initialize_state() -> None:
     init_db()
     logger.info("Database initialized for VisionOps AI")
     pipeline = VisionProcessor(source=settings.camera_index)
@@ -44,6 +43,15 @@ def startup() -> None:
     app.state.detections = []
     app.state.zones = pipeline.zones.zones
     app.state.metrics = pipeline.last_metrics
+
+
+_initialize_state()
+
+
+@app.on_event("startup")
+def startup() -> None:
+    if not hasattr(app.state, "pipeline"):
+        _initialize_state()
 
 
 @app.get("/health")
